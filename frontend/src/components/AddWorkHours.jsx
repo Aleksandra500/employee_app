@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showLoaderAction } from '../store/loaderSlice';
 import axios from 'axios';
+import { addWorkHours } from '../services/addWorkHoursServices';
 
 const AddWorkHours = () => {
   const dispatch = useDispatch();
@@ -14,33 +15,36 @@ const AddWorkHours = () => {
     position: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmployeeIdChange = async (e) => {
     const id = e.target.value;
     setEmployeeId(id);
 
-    if (id) {
-      try {
-        // Poziv na server da uzmemo podatke o zaposlenom na osnovu ID-a
-        const response = await axios.get(`http://localhost:8800/api/employees/${id}`);
+    if (!id) {
+      setEmployeeData({ firstName: '', lastName: '', position: '' });
+      setErrorMessage('');
+      return;
+    }
 
-        if (response.status === 200) {
-          setEmployeeData({
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            position: response.data.position,
-          });
-          setErrorMessage('');
-        }
-      } catch (error) {
-        console.error('Greška pri dobijanju podataka o zaposlenom:', error);
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:8800/api/employees/${id}`);
+      if (response.status === 200) {
         setEmployeeData({
-          firstName: '',
-          lastName: '',
-          position: '',
+          firstName: response.data.first_name,
+          lastName: response.data.last_name,
+          position: response.data.position,
         });
-        setErrorMessage('❌ Zaposleni sa ovim ID-em nije pronađen!');
+        setErrorMessage('');
       }
+      console.log('Podaci o zaposlenom:', response.data);
+    } catch (error) {
+      console.error('Greška pri dobijanju podataka o zaposlenom:', error);
+      setEmployeeData({ firstName: '', lastName: '', position: '' });
+      setErrorMessage('❌ Zaposleni sa ovim ID-em nije pronađen!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,20 +57,12 @@ const AddWorkHours = () => {
       hoursWorked,
     };
 
-    console.log('Radni sati su dodati:', workHoursData);
-
     dispatch(showLoaderAction(true));
-    try {
-      const res = await axios.post('http://localhost:8800/api/work-hours', workHoursData);
-      dispatch(showLoaderAction(false));
+    const res = await addWorkHours(workHoursData);
+    dispatch(showLoaderAction(false));
 
-      if (res.status === 200) {
-        alert('Radni sati su uspešno dodati!');
-      }
-    } catch (error) {
-      dispatch(showLoaderAction(false));
-      console.error('Greška pri dodavanju radnih sati:', error);
-      alert('Došlo je do greške prilikom dodavanja radnih sati.');
+    if (res.status === 200) {
+      alert('Radni sati su uspešno dodati!');
     }
   };
 
@@ -76,6 +72,24 @@ const AddWorkHours = () => {
         <h2 className='text-3xl font-semibold text-center text-white mb-6'>
           Dodaj radne sate
         </h2>
+
+        {/* Prikaz podataka o zaposlenom */}
+        {employeeData.firstName && (
+          <div className='text-white mb-4 text-center'>
+            <p className='text-lg font-medium'>
+              ➤ Dodaješ sate za: <span className='text-green-400 font-semibold'>{employeeData.firstName} {employeeData.lastName}</span> ({employeeData.position})
+            </p>
+          </div>
+        )}
+
+        {isLoading && (
+          <div className='text-white text-sm italic mb-4 text-center'>Učitavanje podataka o zaposlenom...</div>
+        )}
+
+        {errorMessage && (
+          <div className='mb-4 text-red-500 text-sm text-center'>{errorMessage}</div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className='mb-4'>
             <label htmlFor='employeeId' className='block text-sm font-medium text-white'>
@@ -91,6 +105,7 @@ const AddWorkHours = () => {
             />
           </div>
 
+          {/* Prikaz samo ako postoje podaci */}
           {employeeData.firstName && (
             <>
               <div className='mb-4'>
@@ -99,7 +114,7 @@ const AddWorkHours = () => {
                   type='text'
                   value={employeeData.firstName}
                   readOnly
-                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-black'
                 />
               </div>
               <div className='mb-4'>
@@ -108,7 +123,7 @@ const AddWorkHours = () => {
                   type='text'
                   value={employeeData.lastName}
                   readOnly
-                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-black'
                 />
               </div>
               <div className='mb-4'>
@@ -117,14 +132,10 @@ const AddWorkHours = () => {
                   type='text'
                   value={employeeData.position}
                   readOnly
-                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                  className='mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-black'
                 />
               </div>
             </>
-          )}
-
-          {errorMessage && (
-            <div className='mb-4 text-red-500 text-sm'>{errorMessage}</div>
           )}
 
           <div className='mb-4'>
