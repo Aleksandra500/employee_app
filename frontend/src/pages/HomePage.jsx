@@ -4,7 +4,7 @@ import AddNewEmployeeComponent from '../components/AddNewEmployeeComponent'
 function HomePage() {
   return (
     <div>
-        <AddNewEmployeeComponent/>
+       home page
     </div>
   )
 }

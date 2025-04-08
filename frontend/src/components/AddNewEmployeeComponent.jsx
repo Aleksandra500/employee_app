@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify'; // Za notifikacije
+import { addEmployees } from '../services/addEmployeesServices';
+import { useDispatch } from 'react-redux';
+import { showLoaderAction } from '../store/loaderSlice';
+import LoaderComponent from './Loader';
 
 
 function AddNewEmployeeComponent() {
   
-
+ const dispatch = useDispatch() 
   // State za praćenje unosa
   const [data, setData] = useState({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     position: '',
     salary: '',
   });
@@ -26,23 +30,22 @@ function AddNewEmployeeComponent() {
 
   
   const validateForm = () => {
-    const { firstName, lastName, position, salary } = data;
-    let isValid = true;
-
-    setIsFirstNameValid(!!firstName);
-    setIsLastNameValid(!!lastName);
-    setIsPositionValid(!!position);
-    setIsSalaryValid(!!salary && !isNaN(salary));
-
-    if (!firstName || !lastName || !position || !salary || isNaN(salary)) {
-      isValid = false;
-    }
-
-    return isValid;
+    const { first_name, last_name, position, salary } = data;
+  
+    const isFirstName = !!first_name;
+    const isLastName = !!last_name;
+    const isPos = !!position;
+    const isSal = !!salary && !isNaN(salary);
+  
+    setIsFirstNameValid(isFirstName);
+    setIsLastNameValid(isLastName);
+    setIsPositionValid(isPos);
+    setIsSalaryValid(isSal);
+  
+    return isFirstName && isLastName && isPos && isSal;
   };
-
- 
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -50,25 +53,37 @@ function AddNewEmployeeComponent() {
       return;
     }
 
+    
     // Ovde šaljemo podatke (npr. na backend ili u Redux)
     // dispatch(addEmployeeAction(data));
-
+    dispatch(showLoaderAction(true))
+    const res = await addEmployees(data)
+    dispatch(showLoaderAction(false))
+    if (res.status === 'success') {
+        toast.success(res.message)
+        setData({ first_name: '', last_name: '', position: '', salary: '' });
+  } else {
+    toast.error(res.message);
+    setData({ first_name: '', last_name: '', position: '', salary: '' });
+}
     // Ako je sve u redu, možemo prikazati uspešnu poruku
-    toast.success('Employee added successfully');
+ 
     // Resetovanje forme
-    setData({ firstName: '', lastName: '', position: '', salary: '' });
   };
 
   return (
+    <>
+    {<LoaderComponent/>    }
+    {console.log(data)}
     <div className="flex justify-center items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/path/to/your/image.jpg')" }}>
-      <div className="bg-black bg-opacity-50 p-8 rounded-lg w-full max-w-md">
+      <div className="bg-black bg-opacity-50 p-8 rounded-lg w-full max-w-lg">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="firstName" className="block text-white text-lg">First Name</label>
             <input 
               type="text" 
-              id="firstName" 
-              value={data.firstName}
+              id="first_name" 
+              value={data.first_name}
               onChange={handleChange}
               className={`mt-2 p-3 w-full rounded-md border ${isFirstNameValid ? 'border-gray-300' : 'border-red-500'}`} 
               placeholder="Enter first name" 
@@ -80,8 +95,8 @@ function AddNewEmployeeComponent() {
             <label htmlFor="lastName" className="block text-white text-lg">Last Name</label>
             <input 
               type="text" 
-              id="lastName" 
-              value={data.lastName}
+              id="last_name" 
+              value={data.last_name}
               onChange={handleChange}
               className={`mt-2 p-3 w-full rounded-md border ${isLastNameValid ? 'border-gray-300' : 'border-red-500'}`} 
               placeholder="Enter last name" 
@@ -124,6 +139,7 @@ function AddNewEmployeeComponent() {
         </form>
       </div>
     </div>
+    </>
   );
 }
 
