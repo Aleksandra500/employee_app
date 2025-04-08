@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AddNewEmployeeComponent from './AddNewEmployeeComponent';
+import AddWorkHours from './AddWorkHours';
 
 function NavbarComponent() {
 
@@ -12,7 +13,7 @@ function NavbarComponent() {
         case "new employees":
           return <AddNewEmployeeComponent/>;
       case "add hours":
-        return ;
+        return <AddWorkHours/>;
       default: "manage employees"
         return ;
     }
