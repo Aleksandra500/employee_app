@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify'; // Za notifikacije
+import { toast } from 'react-toastify'; 
 import { addEmployees } from '../services/addEmployeesServices';
 import { useDispatch } from 'react-redux';
 import { showLoaderAction } from '../store/loaderSlice';
@@ -53,22 +53,16 @@ function AddNewEmployeeComponent() {
       return;
     }
 
-    
-    // Ovde šaljemo podatke (npr. na backend ili u Redux)
-    // dispatch(addEmployeeAction(data));
     dispatch(showLoaderAction(true))
     const res = await addEmployees(data)
     dispatch(showLoaderAction(false))
-    if (res.status === 'success') {
+    if (res.status === 200) {
         toast.success(res.message)
         setData({ first_name: '', last_name: '', position: '', salary: '' });
   } else {
     toast.error(res.message);
     setData({ first_name: '', last_name: '', position: '', salary: '' });
 }
-    // Ako je sve u redu, možemo prikazati uspešnu poruku
- 
-    // Resetovanje forme
   };
 
   return (

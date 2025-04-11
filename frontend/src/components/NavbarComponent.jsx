@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AddNewEmployeeComponent from './AddNewEmployeeComponent';
 import AddWorkHours from './AddWorkHours';
+import ManageEmployees from './ManageEmployees';
 
 function NavbarComponent() {
 
@@ -8,13 +9,13 @@ function NavbarComponent() {
 
   const renderComponent = () => {
     switch (activeTab) {
-      case "statistic":
-        return ;
+      case "manage employees":
+        return <ManageEmployees/>;
         case "new employees":
           return <AddNewEmployeeComponent/>;
       case "add hours":
         return <AddWorkHours/>;
-      default: "manage employees"
+      default: "statistic"
         return ;
     }
   };
