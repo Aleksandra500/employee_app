@@ -1,6 +1,5 @@
 const db = require('../db');
 
-
 // DODAVANJE NOVOG ZAPOSLENOG
 
 exports.addNewEmployee = (req, res, next) => {
@@ -26,31 +25,25 @@ exports.addNewEmployee = (req, res, next) => {
 		});
 	});
 };
-  
+
 // izlistavanje svih zaposlenih
 
 exports.getAllEmployees = (req, res, next) => {
-    
-  const sql = 'SELECT * FROM employees'
+	const sql = 'SELECT * FROM employees';
 
-  db.query(sql, (err, result) => {
-	if(err) {
-		return res.status(500).json({message: 'Greska na Serveru'})
-	} 
+	db.query(sql, (err, result) => {
+		if (err) {
+			return res.status(500).json({ message: 'Greska na Serveru' });
+		}
 
-	return res.status(200).json({
-		data: result,
-		status: 'success'
-	})
-  } )
+		return res.status(200).json({
+			data: result,
+			status: 'success',
+		});
+	});
+};
 
-   
-}
-
-
-
-
-// TRAZIMO PO ID-u ZA UNOSH RADNIH SATI 
+// TRAZIMO PO ID-u ZA UNOSH RADNIH SATI
 
 exports.getEmployeeById = (req, res, next) => {
 	const employeeId = req.params.id;
@@ -72,19 +65,16 @@ exports.getEmployeeById = (req, res, next) => {
 	});
 };
 
-
 // DODAVANJE RADIH SATI, OSMOCASOVNO JE DEFAULTNO
- 
+
 exports.addHours = (req, res, next) => {
 	const { employeeId, date, hoursWorked } = req.body;
 
 	if (!employeeId || !date || !hoursWorked) {
-		return res
-			.status(400)
-			.json({
-				message:
-					'Svi podaci moraju biti uneti (employeeId, date, hoursWorked)',
-			});
+		return res.status(400).json({
+			message:
+				'Svi podaci moraju biti uneti (employeeId, date, hoursWorked)',
+		});
 	}
 
 	const checkEmployeeQuery = 'SELECT * FROM employees WHERE id = ?';
@@ -99,6 +89,30 @@ exports.addHours = (req, res, next) => {
 				.status(404)
 				.json({ message: 'Zaposleni sa tim ID-jem nije pronađen' });
 		}
+
+		const chekWorkHoursQuery =
+			'SELECT * FROM work_hours WHERE employee_id = ? AND date = ?';
+		db.query(
+			chekWorkHoursQuery,
+			[employeeId, date],
+			(err, result) => {
+				if (err) {
+					console.log('❌ Greška pri proveri radnih sati:', err);
+					return res
+						.status(500)
+						.json({ message: 'greska na serveru' });
+				}
+
+				if (result.length > 0) {
+					return res
+						.status(200)
+						.json({
+							message:
+								'Radni sati za ovog zaposlenog na taj datum već postoje',
+						});
+				}
+			}
+		);
 
 		const insertWorkHoursQuery =
 			'INSERT INTO work_hours (employee_id, date, hours_worked) VALUES (?, ?, ?)';
@@ -121,5 +135,3 @@ exports.addHours = (req, res, next) => {
 		);
 	});
 };
-
-

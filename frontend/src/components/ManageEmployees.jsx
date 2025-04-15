@@ -34,7 +34,7 @@ function ManageEmployees() {
 	}, [dispatch, allEmployees]);
 
 	return (
-		<div className='container mx-auto '>
+		<div className='container mx-auto relative'>
 			<div className='mt-52'>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label='simple table'>
@@ -86,12 +86,12 @@ function ManageEmployees() {
 									<TableCell component='th' scope='row' style={{fontSize: '18px'}}>
 										{emm.id}
 									</TableCell>
-									<TableCell align='right'>
+									<TableCell align='right' style={{fontSize: '18px'}}>
 										{emm.first_name}
 									</TableCell>
 									<TableCell align='right' style={{fontSize: '18px'}} >{emm.last_name}</TableCell>
 									<TableCell align='right' style={{fontSize: '18px'}}>{emm.position}</TableCell>
-									<TableCell align='right' style={{fontSize: '18px'}}>{emm.salary}</TableCell>
+									<TableCell align='right' style={{fontSize: '18px'}}>{emm.salary} €</TableCell>
 									<TableCell align='right'>
 										<Box
 											display='flex'
@@ -105,7 +105,7 @@ function ManageEmployees() {
 											display='flex'
 											justifyContent='flex-end'
 											alignItems='center'>
-											<MdDeleteOutline size={24} style={{ cursor: 'pointer' }} />
+											<MdDeleteOutline size={24} color='red' style={{ cursor: 'pointer' }} />
 										</Box>
 									</TableCell>
 								</TableRow>

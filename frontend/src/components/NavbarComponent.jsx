@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import AddNewEmployeeComponent from './AddNewEmployeeComponent';
 import AddWorkHours from './AddWorkHours';
 import ManageEmployees from './ManageEmployees';
+import SalaryComponent from './SalaryComponent';
 
 function NavbarComponent() {
 
@@ -13,8 +14,10 @@ function NavbarComponent() {
         return <ManageEmployees/>;
         case "new employees":
           return <AddNewEmployeeComponent/>;
-      case "add hours":
-        return <AddWorkHours/>;
+          case "addworkhours":
+            return <AddWorkHours/>;
+      case "salary":
+        return <SalaryComponent/>;
       default: "statistic"
         return ;
     }
@@ -33,14 +36,19 @@ function NavbarComponent() {
            
             <span className="text-3xl  font-serif text-black">New employees</span>
           </div>
-          <div className="flex items-center justify-center space-x-3 cursor-pointer" onClick={() => setActiveTab("add hours")}>
-            
-            <span className="text-3xl font-serif text-black">Add Hours</span>
-          </div>
           <div className="flex items-center justify-center space-x-3 cursor-pointer" onClick={() => setActiveTab("manage employees")}>
-           
-            <span className="text-3xl  font-serif text-black">Manage Employees</span>
+            
+            <span className="text-3xl font-serif text-black">Manage Employees</span>
           </div>
+          <div className="flex items-center justify-center space-x-3 cursor-pointer" onClick={() => setActiveTab("addworkhours")}>
+            
+            <span className="text-3xl font-serif text-black">Add Work Hours</span>
+          </div>
+          <div className="flex items-center justify-center space-x-3 cursor-pointer" onClick={() => setActiveTab("salary")}>
+           
+            <span className="text-3xl  font-serif text-black">Salary</span>
+          </div>
+          
         </div>
       </div>
       
