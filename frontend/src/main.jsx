@@ -9,6 +9,7 @@ import {
 import store from './store/store.js'
 import HomePage from './pages/HomePage.jsx';
 import { Provider } from 'react-redux';
+import SinglePageSalary from './pages/SinglePageSalary.jsx';
 
 
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <HomePage/>
     },
+	{
+		path:'employee/:employeeId',
+		element: <SinglePageSalary/>
+	}
     ],
 	},
 ]);
