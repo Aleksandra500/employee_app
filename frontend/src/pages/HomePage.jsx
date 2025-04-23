@@ -1,10 +1,10 @@
 import React from 'react'
-import AddNewEmployeeComponent from '../components/AddNewEmployeeComponent'
+import NavbarComponent from '../components/NavbarComponent'
 
 function HomePage() {
   return (
     <div>
-       home page
+       <NavbarComponent/>
     </div>
   )
 }

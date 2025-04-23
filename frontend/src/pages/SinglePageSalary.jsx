@@ -26,7 +26,7 @@ function SinglePageSalary() {
   if (!employee) return <div className="text-center text-red-500 mt-10">Zaposleni nije pronađen.</div>;
 
   return (
-    <div className="flex flex-col items-center p-10">
+    <div className="flex flex-col items-center mt-24">
       <div ref={pdfRef} className="bg-white shadow-xl rounded-xl p-8 w-full max-w-2xl border border-gray-200">
 
 
