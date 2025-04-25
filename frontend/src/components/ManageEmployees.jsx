@@ -14,6 +14,8 @@ import { saveInAllActions } from '../store/employeesSlice';
 import { VscGitPullRequestGoToChanges } from 'react-icons/vsc';
 import { MdDeleteOutline } from 'react-icons/md';
 import { Box } from '@mui/material';
+import { deleteServices } from '../services/deleteServices';
+import { toast } from 'react-toastify'; 
 function ManageEmployees() {
 	const dispatch = useDispatch();
 	const { allEmployees } = useSelector(
@@ -31,7 +33,24 @@ function ManageEmployees() {
 			}
 		};
 		fetchEmployees();
-	}, [dispatch, allEmployees]);
+	}, [dispatch]);
+
+	const handleDelete = async (id) => {
+		console.log(id);
+		
+      dispatch(showLoaderAction(true))
+	  const res = await deleteServices(id)
+	  console.log(res, 'res sa fronta delete');
+	  dispatch(showLoaderAction(false))
+      if(res.status == 'success'){
+		toast.success(res.message)
+		const updatedEmployees = allEmployees.filter(emp => emp.id !== Number(id));
+		dispatch(saveInAllActions(updatedEmployees))
+	  }
+	  
+	}
+	
+
 
 	return (
 		<div className='container mx-auto relative'>
@@ -77,9 +96,11 @@ function ManageEmployees() {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{allEmployees.map((emm) => (
+							{allEmployees.map((emm) => {
+								const key = `${emm.id}`
+							  return (
 								<TableRow
-									key={emm.id}
+									key={key}
 									sx={{
 										'&:last-child td, &:last-child th': { border: 0 },
 									}}>
@@ -105,11 +126,11 @@ function ManageEmployees() {
 											display='flex'
 											justifyContent='flex-end'
 											alignItems='center'>
-											<MdDeleteOutline size={24} color='red' style={{ cursor: 'pointer' }} />
+											<MdDeleteOutline size={24} color='red' style={{ cursor: 'pointer' }}  onClick={() => handleDelete(key)}/>
 										</Box>
 									</TableCell>
 								</TableRow>
-							))}
+							)})}
 						</TableBody>
 					</Table>
 				</TableContainer>

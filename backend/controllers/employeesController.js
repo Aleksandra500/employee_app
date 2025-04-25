@@ -135,3 +135,25 @@ exports.addHours = (req, res, next) => {
 		);
 	});
 };
+
+exports.deleteOne = (req, res, next) => {
+	const {id} = req.params
+	
+	const sql = 'DELETE FROM employees WHERE id = ?'
+
+	db.query(sql, [id], (err, result) => {
+		if (err) {
+			console.log('❌ Greska pri brisanju', err);
+			return res .status(500).json({message: 'Greska pri brisanju'})
+			
+		}
+
+		return res.status(200).json({
+			status: 'success',
+			message: 'Ovaj korisnik je uspesno obrisan'
+		})
+	})
+	
+	
+	
+}
