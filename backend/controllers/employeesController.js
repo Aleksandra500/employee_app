@@ -157,3 +157,10 @@ exports.deleteOne = (req, res, next) => {
 	
 	
 }
+
+exports.putOne = (req, res, next) => {
+	const {id} = req.params
+	console.log(req.params);
+	res.send('cao')
+	
+}

@@ -16,11 +16,16 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { Box } from '@mui/material';
 import { deleteServices } from '../services/deleteServices';
 import { toast } from 'react-toastify'; 
+import PatchModal from '../modals/PatchModal'
+import { useState } from 'react';
+import { editService } from '../services/editService';
 function ManageEmployees() {
 	const dispatch = useDispatch();
 	const { allEmployees } = useSelector(
 		(state) => state.employeesStore
 	);
+	const [editOpen, setEditOpen] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 	useEffect(() => {
 		const fetchEmployees = async () => {
 			dispatch(showLoaderAction(true));
@@ -50,7 +55,30 @@ function ManageEmployees() {
 	  
 	}
 	
+	const handleChange = (employee) => {
+       setEditOpen(true)
+	   setSelectedEmployee(employee)
+	   console.log('saviiiing', employee);
+	   
 
+	}
+
+	const handleSaveChanges = async (updatedEmployee) => {
+		console.log('Saving...', updatedEmployee);
+		setEditOpen(false);
+		dispatch(showLoaderAction(true))
+		const res = await editService(updatedEmployee.id, updatedEmployee)
+		console.log(res, 'res sa fronta');
+		dispatch(showLoaderAction(false))
+		if(res.status == 'success'){
+			toast.success(res.message)
+			const updatedEmployees = allEmployees.map(emp =>
+				emp.id === updatedEmployee.id ? updatedEmployee : emp
+			  );
+			dispatch(saveInAllActions(updatedEmployees))
+		  }
+		
+	}
 
 	return (
 		<div className='container mx-auto relative'>
@@ -118,7 +146,7 @@ function ManageEmployees() {
 											display='flex'
 											justifyContent='flex-end'
 											alignItems='center'>
-											<VscGitPullRequestGoToChanges size={24} style={{ cursor: 'pointer' }}/>
+											<VscGitPullRequestGoToChanges size={24} style={{ cursor: 'pointer' }} onClick={()=> handleChange(emm)}/>
 										</Box>
 									</TableCell>
 									<TableCell align='right'>
@@ -135,6 +163,7 @@ function ManageEmployees() {
 					</Table>
 				</TableContainer>
 			</div>
+			{editOpen && <PatchModal open={editOpen} onClose={() => setEditOpen(false)} userData={selectedEmployee} onSave={handleSaveChanges}/>}
 		</div>
 	);
 }
