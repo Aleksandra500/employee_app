@@ -104,12 +104,10 @@ exports.addHours = (req, res, next) => {
 				}
 
 				if (result.length > 0) {
-					return res
-						.status(200)
-						.json({
-							message:
-								'Radni sati za ovog zaposlenog na taj datum već postoje',
-						});
+					return res.status(200).json({
+						message:
+							'Radni sati za ovog zaposlenog na taj datum već postoje',
+					});
 				}
 			}
 		);
@@ -137,30 +135,59 @@ exports.addHours = (req, res, next) => {
 };
 
 exports.deleteOne = (req, res, next) => {
-	const {id} = req.params
-	
-	const sql = 'DELETE FROM employees WHERE id = ?'
+	const { id } = req.params;
+
+	const sql = 'DELETE FROM employees WHERE id = ?';
 
 	db.query(sql, [id], (err, result) => {
 		if (err) {
 			console.log('❌ Greska pri brisanju', err);
-			return res .status(500).json({message: 'Greska pri brisanju'})
-			
+			return res.status(500).json({ message: 'Greska pri brisanju' });
 		}
 
 		return res.status(200).json({
 			status: 'success',
-			message: 'Ovaj korisnik je uspesno obrisan'
-		})
-	})
-	
-	
-	
-}
+			message: 'Ovaj korisnik je uspesno obrisan',
+		});
+	});
+};
 
 exports.putOne = (req, res, next) => {
-	const {id} = req.params
-	console.log(req.params);
-	res.send('cao')
-	
-}
+	const { id } = req.params;
+	const { first_name, last_name, position, salary } = req.body;
+
+	if (!first_name || !last_name || !position || !salary) {
+		return res.status(400).json({
+			status: 'error',
+			message: 'All fields are required.',
+		});
+	}
+
+	const sql = `
+		UPDATE employees 
+		SET first_name = ?, last_name = ?, position = ?, salary = ?
+		WHERE id = ?
+	`;
+
+	db.query(sql, [first_name, last_name, position, salary, id], (err, result) => {
+		if (err) {
+			console.error('MySQL Error:', err);
+			return res.status(500).json({
+				status: 'error',
+				message: 'Database error.',
+			});
+		}
+
+		if (result.affectedRows === 0) {
+			return res.status(404).json({
+				status: 'error',
+				message: 'Employee not found.',
+			});
+		}
+
+		return res.status(200).json({
+			status: 'success',
+			message: 'Employee updated successfully.',
+		});
+	});
+};
