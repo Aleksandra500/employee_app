@@ -5,14 +5,14 @@ const db = require('./db');
 
 const employeesRoutes = require('./routes/employeesRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
-
+const loginRoutes = require('./routes/loginRoutes')
 app.use(express.urlencoded({ extended: false}))
 app.use(express.json())
 app.use(cors()) 
 
 app.use('/api/employees', employeesRoutes)
 app.use('/api/payment', paymentRoutes)
-
+app.use('/api/login', loginRoutes)
 
 
 

@@ -72,8 +72,7 @@ exports.addHours = (req, res, next) => {
 
 	if (!employeeId || !date || !hoursWorked) {
 		return res.status(400).json({
-			message:
-				'Svi podaci moraju biti uneti (employeeId, date, hoursWorked)',
+			message: 'Svi podaci moraju biti uneti (employeeId, date, hoursWorked)',
 		});
 	}
 
@@ -85,52 +84,37 @@ exports.addHours = (req, res, next) => {
 		}
 
 		if (result.length === 0) {
-			return res
-				.status(404)
-				.json({ message: 'Zaposleni sa tim ID-jem nije pronađen' });
+			return res.status(404).json({ message: 'Zaposleni sa tim ID-jem nije pronađen' });
 		}
 
-		const chekWorkHoursQuery =
-			'SELECT * FROM work_hours WHERE employee_id = ? AND date = ?';
-		db.query(
-			chekWorkHoursQuery,
-			[employeeId, date],
-			(err, result) => {
-				if (err) {
-					console.log('❌ Greška pri proveri radnih sati:', err);
-					return res
-						.status(500)
-						.json({ message: 'greska na serveru' });
-				}
-
-				if (result.length > 0) {
-					return res.status(200).json({
-						message:
-							'Radni sati za ovog zaposlenog na taj datum već postoje',
-					});
-				}
+		const checkWorkHoursQuery = 'SELECT * FROM work_hours WHERE employee_id = ? AND date = ?';
+		db.query(checkWorkHoursQuery, [employeeId, date], (err, result) => {
+			if (err) {
+				console.log('❌ Greška pri proveri radnih sati:', err);
+				return res.status(500).json({ message: 'Greška na serveru' });
 			}
-		);
 
-		const insertWorkHoursQuery =
-			'INSERT INTO work_hours (employee_id, date, hours_worked) VALUES (?, ?, ?)';
-		db.query(
-			insertWorkHoursQuery,
-			[employeeId, date, hoursWorked],
-			(err, result) => {
+			if (result.length > 0) {
+				return res.status(200).json({
+					message: 'Radni sati za ovog zaposlenog na taj datum već postoje',
+				});
+			}
+
+			// ⬇ OVAJ DEO SE IZVRŠAVA SAMO AKO NE POSTOJE UNOSI
+			const insertWorkHoursQuery =
+				'INSERT INTO work_hours (employee_id, date, hours_worked) VALUES (?, ?, ?)';
+			db.query(insertWorkHoursQuery, [employeeId, date, hoursWorked], (err, result) => {
 				if (err) {
 					console.error('❌ Greška pri unosu radnih sati:', err);
-					return res
-						.status(500)
-						.json({ message: 'Greška pri unosu radnih sati' });
+					return res.status(500).json({ message: 'Greška pri unosu radnih sati' });
 				}
 
 				return res.status(200).json({
 					status: 'success',
 					message: 'Radni sati su uspešno dodati!',
 				});
-			}
-		);
+			});
+		});
 	});
 };
 

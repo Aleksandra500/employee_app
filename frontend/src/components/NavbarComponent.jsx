@@ -7,7 +7,7 @@ function NavbarComponent() {
       <div className="container mx-auto flex items-center justify-between px-1 lg:flex-row flex-col gap-[10px] py-[10px]">
 
         <Link to="/statistic">
-          <span className="text-3xl font-serif text-black cursor-pointer">Statistic</span>
+          <span className="text-3xl font-serif text-black cursor-pointer">Statistics</span>
         </Link>
 
         <Link to="/addEmployee">

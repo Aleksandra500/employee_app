@@ -1,11 +1,31 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import LoginForm from '../components/LoginForm'
+import RegisterForm from '../components/RegisterForm'
+import { Box, Button } from '@mui/material';
 function HomePage() {
+  const [showLogin, setShowLogin] = useState(true);
+
   return (
-    <div>
-      
-    </div>
+    <>
+        <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="50px"
+    >
+      {showLogin ? <LoginForm /> : <RegisterForm />}
+      <Button
+        onClick={() => setShowLogin(!showLogin)}
+        sx={{ mt: 2 }}
+      >
+        {showLogin
+          ? 'Need an account? Register'
+          : 'Already have an account? Login'}
+      </Button>
+    </Box>
+  </>
   )
 }
 
-export default HomePage
+export default HomePage;

@@ -128,7 +128,7 @@ function SalaryComponent() {
 											/>
 										</TableCell>
 										<TableCell style={{ fontSize: '18px' }}>
-											{data.total_payment}
+											{data.total_payment} €
 										</TableCell>
 										<TableCell style={{ fontSize: '18px' }}>
 											<Link to={`/employee/${data.employee_id}`}>View More</Link>

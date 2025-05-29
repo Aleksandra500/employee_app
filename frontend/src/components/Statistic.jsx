@@ -45,7 +45,7 @@ function Statistic() {
 				</div>
 				<div className="bg-white p-6 rounded-xl shadow-md text-center">
 					<h2 className="text-xl font-semibold">Total Payments</h2>
-					<p className="text-2xl mt-2 text-green-600 font-bold">{totalPayments} RSD</p>
+					<p className="text-2xl mt-2 text-green-600 font-bold">{totalPayments} €</p>
 				</div>
 			</div>
 
