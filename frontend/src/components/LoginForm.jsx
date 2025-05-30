@@ -1,12 +1,15 @@
 import React from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import { useDispatch } from 'react-redux';
+import { showLoaderAction } from "../store/loaderSlice";
+import { loginService } from "../services/loginServices";
 
 export default function HomePage() {
   const [form, setForm] = React.useState({
     username: "",
     password: "",
   });
-
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -14,9 +17,11 @@ export default function HomePage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Ovde ide tvoj login request
+      dispatch(showLoaderAction(true))
+        const res = await loginService(form)
+        dispatch(showLoaderAction(false))
     console.log("Login:", form);
   };
 

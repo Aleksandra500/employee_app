@@ -1,13 +1,15 @@
 import React from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
-
+import { useDispatch } from 'react-redux';
+import { showLoaderAction } from "../store/loaderSlice";
+import { registerService } from "../services/loginServices";
 export default function RegisterForm() {
   const [form, setForm] = React.useState({
     username: "",
-    email: "",
     password: "",
   });
 
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -15,9 +17,11 @@ export default function RegisterForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Ovde ide tvoj register request
+    dispatch(showLoaderAction(true))
+    const res = await registerService(form)
+    dispatch(showLoaderAction(false))
     console.log("Register:", form);
   };
 
@@ -40,15 +44,6 @@ export default function RegisterForm() {
             label="Username"
             name="username"
             value={form.username}
-            onChange={handleChange}
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Email"
-            name="email"
-            type="email"
-            value={form.email}
             onChange={handleChange}
           />
           <TextField
