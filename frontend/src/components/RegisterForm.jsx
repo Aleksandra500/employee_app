@@ -21,6 +21,13 @@ export default function RegisterForm() {
     e.preventDefault();
     dispatch(showLoaderAction(true))
     const res = await registerService(form)
+    if(res.data.status === 'success'){
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+    }else{
+      console.log('ovde pravi gresku');
+      
+    }
     dispatch(showLoaderAction(false))
     console.log("Register:", form);
   };

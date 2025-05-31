@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const db = require('./db');
-
+require('dotenv').config();
 const employeesRoutes = require('./routes/employeesRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
 const loginRoutes = require('./routes/loginRoutes')
@@ -16,7 +16,7 @@ app.use('/api/login', loginRoutes)
 
 
 
-app.listen(8800, () => {
+app.listen(process.env.PORT, () => {
     console.log('contected 👩‍💻');
     
 } )
