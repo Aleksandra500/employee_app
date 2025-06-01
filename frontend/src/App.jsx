@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavbarComponent from "./components/NavbarComponent";
@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 
 
 function App() {
- 
+  const location = useLocation();
 
   return (
     <>
@@ -15,8 +15,9 @@ function App() {
       <div className="absolute inset-0 bg-black opacity-40 z-[-1]">
       </div>
        
-       <NavbarComponent/>
+      
        <ToastContainer/>
+       {location.pathname !== '/' && <NavbarComponent />}
        <Outlet/>
     </div>
     </>

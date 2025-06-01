@@ -3,12 +3,14 @@ import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 import { useDispatch } from 'react-redux';
 import { showLoaderAction } from "../store/loaderSlice";
 import { registerService } from "../services/loginServices";
+import { useNavigate } from 'react-router-dom';
 export default function RegisterForm() {
   const [form, setForm] = React.useState({
     username: "",
     password: "",
   });
-
+  const navigate = useNavigate()
+ 
   const dispatch = useDispatch()
   const handleChange = (e) => {
     setForm({
@@ -17,19 +19,27 @@ export default function RegisterForm() {
     });
   };
 
+  // OVDE SAM STALA SA CUVANJEM TOKENA U LOCALSTORAGE
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     dispatch(showLoaderAction(true))
     const res = await registerService(form)
-    if(res.data.status === 'success'){
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-    }else{
-      console.log('ovde pravi gresku');
-      
-    }
     dispatch(showLoaderAction(false))
-    console.log("Register:", form);
+    console.log('Raw response:', res);
+    console.log('Status type:', typeof res.status);
+    console.log('Status trimmed:', res.status?.trim());
+    console.log('Check condition:', res.status?.trim().toLowerCase() === 'success');
+    
+    if (res.status === 'success') {
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('user', JSON.stringify(res.user));
+      console.log('🎉 Uspešno sačuvano u localStorage');
+      navigate('statistic');
+     
+    } else {
+      console.log('⚠️ Došlo je do greške:', res.message);
+    }
   };
 
   return (
