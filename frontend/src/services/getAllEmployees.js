@@ -4,7 +4,7 @@ export const getAll = async () => {
 
   try {
     const res = await axios.get('http://localhost:8800/api/employees/getAll')
-    console.log(res);
+    
     if (res.status === 200 && res.data.status === 'success') {
         return {
             status: res.data.status,

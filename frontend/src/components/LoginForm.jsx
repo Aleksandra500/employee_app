@@ -3,6 +3,7 @@ import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 import { useDispatch } from 'react-redux';
 import { showLoaderAction } from "../store/loaderSlice";
 import { loginService } from "../services/loginServices";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [form, setForm] = React.useState({
@@ -10,6 +11,7 @@ export default function HomePage() {
     password: "",
   });
   const dispatch = useDispatch()
+   const navigate = useNavigate()
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -22,7 +24,15 @@ export default function HomePage() {
       dispatch(showLoaderAction(true))
         const res = await loginService(form)
         dispatch(showLoaderAction(false))
-    console.log("Login:", form);
+        if (res.status === 'success') {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+          navigate('statistic');
+         
+        } else {
+          console.log('⚠️ Došlo je do greške:', res.message);
+        }
+    
   };
 
   return (

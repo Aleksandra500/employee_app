@@ -41,7 +41,7 @@ const AddWorkHours = () => {
 				});
 				setErrorMessage('');
 			}
-			console.log('Podaci o zaposlenom:', response.data);
+			
 		} catch (error) {
 			console.error(
 				'Greška pri dobijanju podataka o zaposlenom:',

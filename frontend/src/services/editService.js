@@ -3,7 +3,7 @@ import axios from "axios";
 export const editService = async(id, data) => {
     try {
         const res  = await axios.put(`http://localhost:8800/api/employees/${id}`, data)
-        console.log(res, 'res iz servisa');
+       
         if (res.status === 200 && res.data.status === 'success') {
            return {
                status: res.data.status,
@@ -15,7 +15,7 @@ export const editService = async(id, data) => {
            message: res.data.message,
        };
     } catch (err) {
-        console.log(err);
+      
         return {
             status: err.response?.data?.err.status,
             message: err.response?.data?.message,

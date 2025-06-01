@@ -68,7 +68,6 @@ function AddNewEmployeeComponent() {
   return (
     <>
     {<LoaderComponent/>    }
-    {console.log(data)}
     <div className="flex justify-center items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/path/to/your/image.jpg')" }}>
       <div className="bg-black bg-opacity-50 p-8 rounded-lg w-full max-w-lg">
         <form onSubmit={handleSubmit} className="space-y-4">

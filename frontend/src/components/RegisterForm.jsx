@@ -26,15 +26,12 @@ export default function RegisterForm() {
     dispatch(showLoaderAction(true))
     const res = await registerService(form)
     dispatch(showLoaderAction(false))
-    console.log('Raw response:', res);
-    console.log('Status type:', typeof res.status);
-    console.log('Status trimmed:', res.status?.trim());
-    console.log('Check condition:', res.status?.trim().toLowerCase() === 'success');
+  
     
     if (res.status === 'success') {
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify(res.user));
-      console.log('🎉 Uspešno sačuvano u localStorage');
+     
       navigate('statistic');
      
     } else {

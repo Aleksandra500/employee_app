@@ -3,7 +3,7 @@ import axios from "axios";
 export const getSalary = async () => {
     try {
         const res = await axios.get('http://localhost:8800/api/payment/getAll');
-        console.log('Response:', res);
+       
 
         // Provera da li je status uspešan
         if (res.status === 200 && res.data.status === 'success') {

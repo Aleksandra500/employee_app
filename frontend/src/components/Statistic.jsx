@@ -17,7 +17,7 @@ function Statistic() {
 	}, []);
 
 	const filtered = data.filter(item => {
-		const recordMonth = item.month?.split('-')[1]; // "2024-04" => "04"
+		const recordMonth = item.month?.split('-')[1]
 		return recordMonth === month;
 	});
 
@@ -33,9 +33,10 @@ function Statistic() {
 				onChange={(e) => setMonth(e.target.value)}
 				className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 mb-10"
 			>
-				<option value="03">Mart</option>
+				
 				<option value="04">April</option>
 				<option value="05">Maj</option>
+				<option value="06">Jun</option>
 			</select>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

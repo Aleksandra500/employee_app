@@ -34,18 +34,16 @@ function ManageEmployees() {
 
 			if (res.status === 'success') {
 				dispatch(saveInAllActions(res.data));
-				console.log(res.data, 'res.data');
+				
 			}
 		};
 		fetchEmployees();
 	}, [dispatch]);
 
 	const handleDelete = async (id) => {
-		console.log(id);
 		
       dispatch(showLoaderAction(true))
 	  const res = await deleteServices(id)
-	  console.log(res, 'res sa fronta delete');
 	  dispatch(showLoaderAction(false))
       if(res.status == 'success'){
 		toast.success(res.message)
@@ -58,17 +56,17 @@ function ManageEmployees() {
 	const handleChange = (employee) => {
        setEditOpen(true)
 	   setSelectedEmployee(employee)
-	   console.log('saviiiing', employee);
+	   
 	   
 
 	}
 
 	const handleSaveChanges = async (updatedEmployee) => {
-		console.log('Saving...', updatedEmployee);
+		
 		setEditOpen(false);
 		dispatch(showLoaderAction(true))
 		const res = await editService(updatedEmployee.id, updatedEmployee)
-		console.log(res, 'res sa fronta');
+		
 		dispatch(showLoaderAction(false))
 		if(res.status == 'success'){
 			toast.success(res.message)

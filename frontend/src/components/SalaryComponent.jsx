@@ -23,7 +23,7 @@ function SalaryComponent() {
 		const fetchSalary = async () => {
 			dispatch(showLoaderAction(true));
 			const res = await getSalary();
-			console.log(res, 'res sa fronta salary');
+			
 			dispatch(showLoaderAction(false));
 			if (res.status === 'success') {
 				dispatch(saveSalaryActions(res.data));
