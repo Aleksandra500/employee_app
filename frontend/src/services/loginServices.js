@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const token = localStorage.getItem('token');
 export const registerService = async (form) => {
     try {
       const token = localStorage.getItem('token');
@@ -38,7 +38,11 @@ export const registerService = async (form) => {
 
 export const loginService = async(form) => {
     try {
-     const res = await axios.post('http://localhost:8800/api/login', form)
+     const res = await axios.post('http://localhost:8800/api/login', form, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     
      if (res.status === 200 && res.data.status === 'success') {
       return {

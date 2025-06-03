@@ -2,6 +2,8 @@ const db = require('../db');
 
 exports.getAll = async (req, res) => {
   try {
+    console.log('queryy');
+    
     const query = `
       SELECT 
         wh.employee_id,

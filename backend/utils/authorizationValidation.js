@@ -6,8 +6,8 @@ exports.protect = (req, res, next) => {
     let token;
 
     // 1. Uzimamo token iz headera
-    if (req.headers.authorization) {
-        token = req.headers.authorization;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        token = req.headers.authorization.split(' ')[1]; // uzima samo token
     }
 
     if (!token) {
