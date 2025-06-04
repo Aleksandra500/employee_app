@@ -19,7 +19,7 @@ export default function RegisterForm() {
     });
   };
 
-  // OVDE SAM STALA SA CUVANJEM TOKENA U LOCALSTORAGE
+  
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function RegisterForm() {
   
     
     if (res.status === 'success') {
-      localStorage.setItem('token', res.token);
+
       localStorage.setItem('user', JSON.stringify(res.user));
      
       navigate('statistic');

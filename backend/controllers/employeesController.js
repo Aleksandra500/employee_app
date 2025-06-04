@@ -100,7 +100,7 @@ exports.addHours = (req, res, next) => {
 				});
 			}
 
-			// ⬇ OVAJ DEO SE IZVRŠAVA SAMO AKO NE POSTOJE UNOSI
+			
 			const insertWorkHoursQuery =
 				'INSERT INTO work_hours (employee_id, date, hours_worked) VALUES (?, ?, ?)';
 			db.query(insertWorkHoursQuery, [employeeId, date, hoursWorked], (err, result) => {

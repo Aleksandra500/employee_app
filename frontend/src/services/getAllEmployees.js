@@ -1,12 +1,10 @@
 import axios from "axios"
-const token = localStorage.getItem('token');
+
 export const getAll = async () => {
 
   try {
     const res = await axios.get('http://localhost:8800/api/employees/getAll', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      withCredentials: true
     })
     
     if (res.status === 200 && res.data.status === 'success') {

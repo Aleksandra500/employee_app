@@ -25,7 +25,6 @@ export default function HomePage() {
         const res = await loginService(form)
         dispatch(showLoaderAction(false))
         if (res.status === 'success') {
-          localStorage.setItem('token', res.token);
           localStorage.setItem('user', JSON.stringify(res.user));
           navigate('statistic');
          

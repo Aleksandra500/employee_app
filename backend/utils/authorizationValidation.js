@@ -6,9 +6,12 @@ exports.protect = (req, res, next) => {
     let token;
 
     // 1. Uzimamo token iz headera
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        token = req.headers.authorization.split(' ')[1]; // uzima samo token
+    if (req.cookies && req.cookies.jwt) {
+        token = req.cookies.jwt
+    }else if(req.headers.authorization && req.headers.authorization.startsWith('Barer ')){
+        token = req.headers.authorization.split(' ')[1]
     }
+    
 
     if (!token) {
         return res.status(401).json({ message: 'Niste ulogovani, ulogujte se prvo' });

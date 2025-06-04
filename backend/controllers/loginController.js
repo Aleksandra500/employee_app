@@ -39,10 +39,17 @@ exports.register = (req, res) => {
       const newUserId = results.insertId;
       const token = createToken(newUserId);
 
+ 
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ,
+        sameSite: 'None',
+        maxAge: 24 * 60 * 60 * 1000
+      })
+
       res.status(200).json({
         message: 'Uspesno ste se registrovali!',
         status: 'success',
-        token,
         user: {
           id: newUserId,
           username,
@@ -82,10 +89,16 @@ exports.login = (req, res) => {
 
         const token = createToken(user.id);
 
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'None',
+          maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
         res.status(200).json({
           message: 'Uspesno ste se ulogovali',
           status:'success',
-          token,
           user: {
             id: user.id,
             username: user.username
@@ -97,3 +110,15 @@ exports.login = (req, res) => {
       });
   });
 };
+
+exports.logout = (req, res) => {
+  res.clearCookie('jwt', {
+  httpOnly: true,
+  secure:process.env.NODE_ENV == 'production',
+  sameSite: 'None'
+  })
+
+  res.status(200).json({
+    message: 'USpesan logout'
+  })
+}

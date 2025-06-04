@@ -1,14 +1,31 @@
 import { Button } from '@mui/material';
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { showLoaderAction } from '../store/loaderSlice';
 
 function NavbarComponent() {
   const navigate = useNavigate()
+const dispatch = useDispatch()
 
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+  const handleLogout = async () => {
+    try {
+      dispatch(showLoaderAction(true))
+        const res = await axios.post('http://localhost:8800/api/login/logout', {}, {
+         withCredentials: true
+      })
+      
+      dispatch(showLoaderAction(false))
+      console.log(res);
+      if(res.status == 200){
+        localStorage.removeItem('user')
+      }
+    } catch (err) {
+      console.log(err, 'logout nije uspeo');
+      
+    }
+    
     navigate('/')
   }
 
